@@ -1,0 +1,31 @@
+{
+  "name": "zsend-webhooks",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prestart": "wrangler types",
+    "start": "wrangler dev -e .env",
+    "predev": "wrangler types",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "cf-typegen": "wrangler types",
+    "types": "wrangler types",
+    "types:sync": "wrangler types",
+    "types:check": "npm run types:sync && git diff --exit-code -- worker-configuration.d.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.12.4",
+    "@types/node": "^25.6.0",
+    "typescript": "^6.0.3",
+    "vitest": "~3.2.0",
+    "wrangler": "^4.85.0"
+  },
+  "dependencies": {
+    "crypto": "^1.0.1"
+  }
+}

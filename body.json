@@ -1,0 +1,17 @@
+{
+  "event": "open",
+  "timestamp": "2026-04-27T12:59:01Z",
+  "email": {
+    "id": "69ee0f26b1eb5d97e14cecd6",
+
+    "message_id": "0106019dc9eb3130-a7b20e13-76e9-4641-a608-68d41acb28a5-000000",
+
+    "from": "ccepr <ccepr@zsend.ccepr.dev>",
+
+    "to": ["大帥哥 <ccepr@ccepr.dev>"],
+
+    "subject": "Hello World",
+
+    "sent_at": "2026-04-26T13:12:06Z"
+  }
+}
