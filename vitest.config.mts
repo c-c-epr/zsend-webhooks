@@ -1,8 +1,8 @@
 import { cloudflareTest } from "@cloudflare/vitest-pool-workers";
 import { defineConfig } from "vitest/config";
-import { TEST_SECRET_KEY } from "./test/constants";
+import { TEST_ZSEND_WEBHOOKS_SECRET } from "./test/constants";
 
-process.env.SECRET_KEY ??= TEST_SECRET_KEY;
+process.env.ZSEND_WEBHOOKS_SECRET ??= TEST_ZSEND_WEBHOOKS_SECRET;
 
 export default defineConfig({
   plugins: [
@@ -10,7 +10,7 @@ export default defineConfig({
       wrangler: { configPath: "./wrangler.jsonc" },
       miniflare: {
         bindings: {
-          SECRET_KEY: TEST_SECRET_KEY,
+          ZSEND_WEBHOOKS_SECRET: TEST_ZSEND_WEBHOOKS_SECRET,
         },
       },
     }),
