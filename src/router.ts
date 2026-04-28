@@ -5,6 +5,14 @@ export async function router(request: Request, env: Env, ctx: ExecutionContext) 
     return new Response('Method Not Allowed', { status: 405 });
   }
 
+  //////////////////////////////////////////////
+  //此段應該在 Zeabur 修復 Bug 後移除
+  console.log(request.headers.get('X-ZSend-Event'));
+  if (request.headers.get('X-ZSend-Event') === 'test') {
+    return new Response('OK!');
+  }
+  //////////////////////////////////////////////
+
   const secret = env.SECRET_KEY;
   if (!secret) {
     return new Response('Server configuration error: SECRET_KEY is not set', { status: 500 });
@@ -39,7 +47,7 @@ export async function router(request: Request, env: Env, ctx: ExecutionContext) 
   // 非同步執行
   ctx.waitUntil(
     (async () => {
-      console.log('Doing some work in the background...');
+      // console.log('Doing some work in the background...');
     })(),
   );
   //  回傳成功
