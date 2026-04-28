@@ -12,9 +12,9 @@ export async function router(request: Request, env: Env, ctx: ExecutionContext) 
     return new Response("OK!");
   }
 
-  const secret = env.SECRET_KEY;
+  const secret = env.ZSEND_WEBHOOKS_SECRET;
   if (!secret) {
-    return new Response("Server configuration error: SECRET_KEY is not set", { status: 500 });
+    return new Response("Server configuration error: ZSEND_WEBHOOKS_SECRET is not set", { status: 500 });
   }
 
   const signature = request.headers.get("x-zsend-signature") as string | null;

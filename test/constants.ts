@@ -1,1 +1,1 @@
-export const TEST_SECRET_KEY = "test-secret-key";
+export const TEST_ZSEND_WEBHOOKS_SECRET = "test-secret-key";

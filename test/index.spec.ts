@@ -2,7 +2,7 @@ import { env, createExecutionContext, waitOnExecutionContext, SELF } from "cloud
 import { describe, it, expect } from "vitest";
 import crypto from "crypto";
 import worker from "../src/_index";
-import { TEST_SECRET_KEY } from "./constants";
+import { TEST_ZSEND_WEBHOOKS_SECRET } from "./constants";
 
 const IncomingRequest = Request<unknown, IncomingRequestCfProperties>;
 
@@ -15,7 +15,7 @@ function signatureFor(secret: string, body = rawBody) {
   return `sha256=${digest}`;
 }
 
-function signedRequest(body = rawBody, signature = signatureFor(TEST_SECRET_KEY, body)) {
+function signedRequest(body = rawBody, signature = signatureFor(TEST_ZSEND_WEBHOOKS_SECRET, body)) {
   return new IncomingRequest("http://example.com/webhook", {
     method: "POST",
     headers: {
@@ -39,14 +39,14 @@ describe("ZSend webhook worker", () => {
     expect(await response.text()).toBe("Method Not Allowed");
   });
 
-  it("rejects requests when SECRET_KEY is not configured", async () => {
+  it("rejects requests when ZSEND_WEBHOOKS_SECRET is not configured", async () => {
     const request = signedRequest();
     const ctx = createExecutionContext();
-    const response = await worker.fetch(request, { ...env, SECRET_KEY: "" }, ctx);
+    const response = await worker.fetch(request, { ...env, ZSEND_WEBHOOKS_SECRET: "" }, ctx);
     await waitOnExecutionContext(ctx);
 
     expect(response.status).toBe(500);
-    expect(await response.text()).toBe("Server configuration error: SECRET_KEY is not set");
+    expect(await response.text()).toBe("Server configuration error: ZSEND_WEBHOOKS_SECRET is not set");
   });
 
   it("rejects requests missing signature headers", async () => {
@@ -64,7 +64,7 @@ describe("ZSend webhook worker", () => {
   });
 
   it("rejects invalid JSON bodies", async () => {
-    const request = signedRequest("{bad json}", signatureFor(TEST_SECRET_KEY, "{bad json}"));
+    const request = signedRequest("{bad json}", signatureFor(TEST_ZSEND_WEBHOOKS_SECRET, "{bad json}"));
     const ctx = createExecutionContext();
     const response = await worker.fetch(request, env, ctx);
     await waitOnExecutionContext(ctx);

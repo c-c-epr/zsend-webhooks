@@ -4,7 +4,7 @@
   "main": "src/_index.ts",
   "compatibility_date": "2026-04-27",
   "secrets": {
-    "required": ["SECRET_KEY"],
+    "required": ["ZSEND_WEBHOOKS_SECRET"],
   },
   "observability": {
     "enabled": false,
