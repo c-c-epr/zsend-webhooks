@@ -5,13 +5,12 @@ export async function router(request: Request, env: Env, ctx: ExecutionContext) 
     return new Response("Method Not Allowed", { status: 405 });
   }
 
-  //////////////////////////////////////////////
-  //此段應該在 Zeabur 修復 Bug 後移除
-  console.log(request.headers.get("X-ZSend-Event"));
+  // 此例外應該在 Zeabur 修復 Bug 後移除，請參考 README.md 中的說明
+  // This exception should be removed after Zeabur fixes the bug, please refer to the README.md for details
   if (request.headers.get("X-ZSend-Event") === "test") {
+    console.log("[TEST] Skip signature verification due to Zeabur bug");
     return new Response("OK!");
   }
-  //////////////////////////////////////////////
 
   const secret = env.SECRET_KEY;
   if (!secret) {
@@ -43,11 +42,13 @@ export async function router(request: Request, env: Env, ctx: ExecutionContext) 
   if (signature !== `sha256=${expectedSignature}`) {
     return new Response("Invalid signature", { status: 401 });
   }
+  console.log(request.headers.get("X-ZSend-Event"));
 
   // 非同步執行
   ctx.waitUntil(
     (async () => {
-      // console.log('Doing some work in the background...');
+      // 在這裡可以做一些背景工作
+      // You can do some work in the background here
     })(),
   );
   //  回傳成功
