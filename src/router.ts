@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import { hmacSha256Hex } from "./unit/hmac";
 
 export async function router(request: Request, env: Env, ctx: ExecutionContext) {
   if (request.method !== "POST") {
@@ -37,7 +37,7 @@ export async function router(request: Request, env: Env, ctx: ExecutionContext) 
   }
 
   const message = `${timestamp}.${rawBody}`;
-  const expectedSignature = crypto.createHmac("sha256", secret).update(message).digest("hex");
+  const expectedSignature = await hmacSha256Hex(secret, message);
 
   if (signature !== `sha256=${expectedSignature}`) {
     return new Response("Invalid signature", { status: 401 });
