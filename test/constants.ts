@@ -1,1 +1,1 @@
-export const TEST_SECRET_KEY = 'test-secret-key';
+export const TEST_SECRET_KEY = "test-secret-key";
