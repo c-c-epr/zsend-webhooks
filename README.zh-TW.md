@@ -1,11 +1,13 @@
 # ZSend Webhooks
 
-ZSend Webhooks 是一個部署在 Cloudflare Workers 上的 webhook 接收端。它會接收 ZSend 傳來的 POST 請求，驗證 `x-zsend-signature` 與 `x-zsend-timestamp`，確認 payload 沒有被竄改後才回應成功。
+**語言：** [English](README.md) | 繁體中文
+
+ZSend Webhooks 是一個部署在 Cloudflare Workers 上的 webhook 接收端。它會接收 ZSend 傳來的 `POST` 請求，驗證 `x-zsend-signature` 與 `x-zsend-timestamp`，確認 payload 沒有被竄改後才回應成功。
 
 ## 功能
 
 - 只接受 `POST` webhook 請求
-- 使用 `SECRET_KEY` 驗證 HMAC SHA-256 簽章
+- 使用 `ZSEND_WEBHOOKS_SECRET` 驗證 HMAC SHA-256 簽章
 - 支援 ZSend 測試事件：`X-ZSend-Event: test`
 - 使用 Cloudflare Workers 執行
 - 使用 Vitest 與 `@cloudflare/vitest-pool-workers` 測試 Worker 行為
@@ -14,7 +16,7 @@ ZSend Webhooks 是一個部署在 Cloudflare Workers 上的 webhook 接收端。
 
 目前程式中對 `X-ZSend-Event: test` 有一個暫時性的例外處理：只要收到這個事件，就會直接回應 `200 OK`，不會進入簽章驗證流程。
 
-這是為了相容 Zeabur 目前的設計缺陷。Zeabur 會在提供 webhook secret 的瞬間，甚至在 endpoint 端有機會完成 `SECRET_KEY` 設定之前，就先送出 `test` 事件。此時接收端還來不及填入與 Zeabur 相同的 secret，因此測試事件無法通過一般的 `x-zsend-signature` 驗證流程。為了讓 Zeabur 的測試功能可以正常判定 endpoint 存活，才暫時讓 `test` 事件無論簽章狀態如何都回應成功。
+這是為了相容 Zeabur 目前的行為。Zeabur 會在提供 webhook secret 的瞬間，甚至在 endpoint 端有機會完成 `ZSEND_WEBHOOKS_SECRET` 設定之前，就先送出 `test` 事件。此時接收端還來不及填入與 Zeabur 相同的 secret，因此測試事件無法通過一般的 `x-zsend-signature` 驗證流程。為了讓 Zeabur 的測試功能可以正常判定 endpoint 存活，才暫時讓 `test` 事件無論簽章狀態如何都回應成功。
 
 等 Zeabur 官方修正測試 webhook 的簽章行為後，預計會移除這段 `test` 事件的例外處理，讓所有 webhook 請求都走一致的簽章驗證流程。
 
@@ -43,7 +45,7 @@ Copy-Item .env.example .env
 接著設定 webhook 驗章用的 secret：
 
 ```env
-SECRET_KEY=your_secret_key_here
+ZSEND_WEBHOOKS_SECRET=your_secret_key_here
 ```
 
 ## 本機開發
@@ -62,10 +64,10 @@ npm start
 
 ## 部署
 
-先把 `SECRET_KEY` 設成 Cloudflare Workers secret：
+先把 `ZSEND_WEBHOOKS_SECRET` 設成 Cloudflare Workers secret：
 
 ```sh
-npx wrangler secret put SECRET_KEY
+npx wrangler secret put ZSEND_WEBHOOKS_SECRET
 ```
 
 部署 Worker：
@@ -98,14 +100,14 @@ const signature = `sha256=${digest}`;
 
 ## 回應狀態
 
-| 狀態碼 | 回應                                                | 情境                                   |
-| ------ | --------------------------------------------------- | -------------------------------------- |
-| `200`  | `OK!`                                               | 簽章正確，或收到 `X-ZSend-Event: test` |
-| `400`  | `Missing signature or timestamp`                    | 缺少簽章或 timestamp                   |
-| `400`  | `Invalid JSON`                                      | body 不是合法 JSON                     |
-| `401`  | `Invalid signature`                                 | 簽章驗證失敗                           |
-| `405`  | `Method Not Allowed`                                | 不是 `POST` 請求                       |
-| `500`  | `Server configuration error: SECRET_KEY is not set` | Worker 未設定 `SECRET_KEY`             |
+| 狀態碼 | 回應                                                           | 情境                                   |
+| ------ | -------------------------------------------------------------- | -------------------------------------- |
+| `200`  | `OK!`                                                          | 簽章正確，或收到 `X-ZSend-Event: test` |
+| `400`  | `Missing signature or timestamp`                               | 缺少簽章或 timestamp                   |
+| `400`  | `Invalid JSON`                                                 | body 不是合法 JSON                     |
+| `401`  | `Invalid signature`                                            | 簽章驗證失敗                           |
+| `405`  | `Method Not Allowed`                                           | 不是 `POST` 請求                       |
+| `500`  | `Server configuration error: ZSEND_WEBHOOKS_SECRET is not set` | Worker 未設定 `ZSEND_WEBHOOKS_SECRET`  |
 
 ## 測試與檢查
 
@@ -127,6 +129,7 @@ npm test
 ```txt
 src/_index.ts        Worker fetch 入口
 src/router.ts        Webhook request 驗證與回應邏輯
+src/unit/hmac.ts     HMAC SHA-256 輔助函式
 test/index.spec.ts   Worker 單元與整合測試
 wrangler.jsonc       Cloudflare Workers 設定
 ```
