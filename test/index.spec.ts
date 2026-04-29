@@ -17,7 +17,7 @@ async function signatureFor(secret: string, body = rawBody) {
 }
 
 async function signedRequest(body = rawBody, signature?: string) {
-  return new IncomingRequest("http://example.com/webhook", {
+  return new IncomingRequest("http://example.com/webhooks/zsend", {
     method: "POST",
     headers: {
       "content-type": "application/json",
@@ -31,7 +31,7 @@ async function signedRequest(body = rawBody, signature?: string) {
 
 describe("ZSend webhook worker", () => {
   it("rejects non-POST requests", async () => {
-    const request = new IncomingRequest("http://example.com/webhook");
+    const request = new IncomingRequest("http://example.com/webhooks/zsend");
     const ctx = createExecutionContext();
     const response = await worker.fetch(request, env, ctx);
     await waitOnExecutionContext(ctx);
@@ -51,7 +51,7 @@ describe("ZSend webhook worker", () => {
   });
 
   it("rejects requests missing signature headers", async () => {
-    const request = new IncomingRequest("http://example.com/webhook", {
+    const request = new IncomingRequest("http://example.com/webhooks/zsend", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: rawBody,
@@ -96,7 +96,7 @@ describe("ZSend webhook worker", () => {
 
   it("accepts valid signed webhook requests in integration style", async () => {
     const request = await signedRequest();
-    const response = await SELF.fetch("https://example.com/webhook", {
+    const response = await SELF.fetch("https://example.com/webhooks/zsend", {
       method: "POST",
       headers: request.headers,
       body: rawBody,
