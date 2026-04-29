@@ -42,13 +42,13 @@ export async function router(request: Request, env: Env, ctx: ExecutionContext) 
   if (signature !== `sha256=${expectedSignature}`) {
     return new Response("Invalid signature", { status: 401 });
   }
-  console.log(request.headers.get("X-ZSend-Event"));
 
   // 非同步執行
   ctx.waitUntil(
     (async () => {
       // 在這裡可以做一些背景工作
       // You can do some work in the background here
+      console.log(`[${request.headers.get("X-ZSend-Event")?.toUpperCase() ?? "UNKNOWN"}]`, body);
     })(),
   );
   //  回傳成功
