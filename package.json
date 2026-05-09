@@ -15,7 +15,7 @@
     "cf-typegen": "wrangler types",
     "types": "wrangler types",
     "types:sync": "wrangler types",
-    "types:check": "npm run types:sync && git diff --exit-code -- worker-configuration.d.ts",
+    "types:check": "pnpm run types:sync && git diff --exit-code -- worker-configuration.d.ts",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
@@ -25,5 +25,6 @@
     "typescript": "^6.0.3",
     "vitest": "^4.1.5",
     "wrangler": "^4.90.0"
-  }
+  },
+  "packageManager": "pnpm@11.0.9"
 }

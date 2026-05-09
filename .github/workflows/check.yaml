@@ -26,18 +26,21 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Enable pnpm
+        run: corepack enable
+
       - name: Setup Node.js
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Install dependencies
-        run: npm ci --prefer-offline --no-audit --no-fund
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Verify generated worker types are up to date
-        run: npm run types:check
+        run: pnpm run types:check
 
   typecheck:
     runs-on: ubuntu-24.04
@@ -49,18 +52,21 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Enable pnpm
+        run: corepack enable
+
       - name: Setup Node.js
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Install dependencies
-        run: npm ci --prefer-offline --no-audit --no-fund
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Type check
-        run: npm run typecheck
+        run: pnpm run typecheck
 
   format:
     runs-on: ubuntu-24.04
@@ -72,18 +78,21 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Enable pnpm
+        run: corepack enable
+
       - name: Setup Node.js
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Install dependencies
-        run: npm ci --prefer-offline --no-audit --no-fund
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Prettier format check
-        run: npm run format:check
+        run: pnpm run format:check
 
   test:
     runs-on: ubuntu-24.04
@@ -95,15 +104,18 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Enable pnpm
+        run: corepack enable
+
       - name: Setup Node.js
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Install dependencies
-        run: npm ci --prefer-offline --no-audit --no-fund
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Run unit tests
-        run: npm run test:run
+        run: pnpm run test:run
