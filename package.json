@@ -19,7 +19,7 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.16.16",
+    "@cloudflare/vitest-pool-workers": "^0.18.0",
     "@types/node": "^25.9.3",
     "prettier": "^3.8.4",
     "typescript": "^6.0.3",
