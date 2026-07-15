@@ -16,7 +16,8 @@
     "types": "wrangler types",
     "types:sync": "wrangler types",
     "types:check": "pnpm run types:sync && git diff --exit-code -- worker-configuration.d.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "postinstall": "wrangler types"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.16.16",
