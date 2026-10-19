@@ -10,7 +10,7 @@ ZSend Webhooks 是一個部署在 Cloudflare Workers 上的 webhook 接收端。
 - 使用 `ZSEND_WEBHOOKS_SECRET` 驗證 HMAC SHA-256 簽章
 - 支援 ZSend 測試事件：`X-ZSend-Event: test`
 - 使用 Cloudflare Workers 執行
-- 使用 Vitest 與 `@cloudflare/vitest-pool-workers` 測試 Worker 行為
+- 使用 Vitest 與 `@cloudflare/vitest-plugin` 測試 Worker 行為
 
 ## Zeabur 測試事件例外
 

@@ -10,7 +10,7 @@ ZSend Webhooks is a webhook receiver deployed on Cloudflare Workers. It accepts 
 - Verifies HMAC SHA-256 signatures with `ZSEND_WEBHOOKS_SECRET`
 - Supports the ZSend test event: `X-ZSend-Event: test`
 - Runs on Cloudflare Workers
-- Tests Worker behavior with Vitest and `@cloudflare/vitest-pool-workers`
+- Tests Worker behavior with Vitest and `@cloudflare/vitest-plugin`
 
 ## Zeabur Test Event Exception
 
